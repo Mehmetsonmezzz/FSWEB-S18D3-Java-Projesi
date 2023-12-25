@@ -131,51 +131,127 @@ LEFT JOIN yazar y
 ON y.yazarno=k.yazarno
 ORDER BY o.ograd DESC
 	13) 10A veya 10B sınıfındaki öğrencilerin adı soyadı ve okuduğu kitap sayısını getirin.
+
+ 	 SELECT o.ograd,o.ogrsoyad,COUNT(i.atarih) as TOPLAM FROM ogrenci as o
+  	INNER JOIN  islem as i
+   	ON o.ogrno=i.ogrno
+    	WHERE o.sinif IN('10A','10C')
+        GROUP BY o.ograd,o.ogrsoyad
 	
-	
+ 
 	14) Tüm kitapların ortalama sayfa sayısını bulunuz.
 	#AVG
 	
-	15) Sayfa sayısı ortalama sayfanın üzerindeki kitapları listeleyin.
+
+
+
+        SELECT AVG(k.sayfasayisi)
+ 	FROM kitap as k
+
+ 
 	
+	15) Sayfa sayısı ortalama sayfanın üzerindeki kitapları listeleyin.
+
+        SELECT * FROM kitap as k
+	WHERE k.sayfasayisi>(SELECT AVG(k.sayfasayisi)
+        FROM kitap as k)
+
+
+
+
+ 
 	
 	16) Öğrenci tablosundaki öğrenci sayısını gösterin
-	
+
+
+ 	 SELECT  COUNT(*) FROM ogrenci as o
 	
 	17) Öğrenci tablosundaki toplam öğrenci sayısını toplam sayı takma(alias kullanımı) adı ile listeleyin.
 	
-	
+         SELECT  COUNT(*) AS Toplam  FROM ogrenci 
+
+ 
 	18) Öğrenci tablosunda kaç farklı isimde öğrenci olduğunu listeleyiniz.
 	
-	
+        SELECT count(distinct ograd) as toplam from ogrenci
+ 
 	19) En fazla sayfa sayısı olan kitabın sayfa sayısını listeleyiniz.
-	
+
+             ÇÖZÜM 1 -SELECT * FROM kitap
+	     ORDER BY sayfasayisi DESC LIMIT 1
+             ÇÖZÜM 2 SELECT MAX(sayfasayisi) FROM kitap
 	
 	20) En fazla sayfası olan kitabın adını ve sayfa sayısını listeleyiniz.
-	
+
+
+             -SELECT ad,sayfasayisi FROM kitap
+	     ORDER BY sayfasayisi DESC LIMIT 1
 	
 	21) En az sayfa sayısı olan kitabın sayfa sayısını listeleyiniz.
-	
+
+               SELECT MIN(sayfasayisi) FROM kitap
 	
 	22) En az sayfası olan kitabın adını ve sayfa sayısını listeleyiniz.
 	
-	
+            SELECT kitapadi,sayfasayisi FROM kitap
+	     ORDER BY sayfasayisi ASC LIMIT 1
+  
 	23) Dram türündeki en fazla sayfası olan kitabın sayfa sayısını bulunuz.
-	
+
+         SELECT MAX(k.sayfasayisi) FROM kitap k
+	    INNER JOIN tur as t
+             ON k.turno=t.turno
+             AND turadi IN('Dram')
 	
 	24) numarası 15 olan öğrencinin okuduğu toplam sayfa sayısını bulunuz.
-	
+	SELECT * FROM ogrenci as o
+	 INNER JOIN islem as i
+  	  ON o.ogrno=i.ogrno
+    	INNER JOIN kitap as k
+	ON i.kitapno = k.kitapno
+	WHERE o.ogrno=15
 	
 	25) İsme göre öğrenci sayılarının adedini bulunuz.(Örn: ali 5 tane, ahmet 8 tane )
 
+          SELECT o.ograd, COUNT(o.ograd) from ogrenci o
+	  GROUP BY o.ograd
+
 	
 	26) Her sınıftaki öğrenci sayısını bulunuz.
-	
+
+            SELECT o.cinsiyet, COUNT(o.ograd) from ogrenci o
+	  GROUP BY o.cinsiyet
 	
 	27) Her sınıftaki erkek ve kız öğrenci sayısını bulunuz.
-	
+
+             SELECT o.ograd, COUNT(o.ograd) from ogrenci o
+	  GROUP BY o.ograd
+      
 	
 	28) Her öğrencinin adını, soyadını ve okuduğu toplam sayfa sayısını büyükten küçüğe doğru listeleyiniz.
-	
-	
+
+         SELECT o.ograd, o.ogrsoyad SUM(k.sayfasayisi) as Toplam
+	 FROM ogrenci as o
+         INNER JOIN islem i
+	ON o.ogrno=i.ogrno
+         INNER JOIN kitap k
+	 ON i.kitapno=k.kitapno
+         GROUP BY o.ograd,o.ogrsoyad
+	 ORDER BY Toplam desc
 	29) Her öğrencinin okuduğu kitap sayısını getiriniz.
+
+        SELECT o.ograd, o.ogrsoyad COUNT(k.kitapno) as Toplam
+	 FROM ogrenci as o
+         INNER JOIN islem i
+	ON o.ogrno=i.ogrno
+         INNER JOIN kitap k
+	 ON i.kitapno=k.kitapno
+         GROUP BY o.ograd,o.ogrsoyad
+	 ORDER BY Toplam desc
+
+
+
+
+
+
+ 
